@@ -1,4 +1,4 @@
-# dont commit changes in config to avoid acidentally publishing login credentials
+# dont commit changes in config to avoid accidentally publishing login credentials
 conf.json
 
 # python stuff
