@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-import sys
 
-import logging
 from sleekxmpp import ClientXMPP
-from sleekxmpp.exceptions import IqError, IqTimeout
+import logging
+
 
 class Bot(ClientXMPP):
     def __init__(self, jid, password, host, port):
         ClientXMPP.__init__(self, jid=jid, password=password)
-        self.add_event_handler('session_start', self.session_start)
-        self.add_event_handler('message', self.message)
 
-        logging.basicConfig(level=logging.DEBUG , format='[sleekxmpp] %(message)s')
+        self.add_event_handler('session_start', self.session_start_handler)
+
         self.connect((host, port))
         self.process()
 
-    def session_start(self, event):
+    def session_start_handler(self, _):
         self.send_presence()
         self.get_roster()
 
-    def message(self, msg):
-        if msg['type'] in ('normal', 'chat'):
-            self.send_message(mto=msg['from'], mbody='Thanks for sending:\n%s' % msg['body'])
+    def send_message_to(self, msg, receivers):
+        logging.info('sending following message to: %s' % ','.join(receivers))
+        logging.info(msg)
+        for receiver in receivers:
+            self.send_message(mto=receiver, mbody=msg)

@@ -8,4 +8,4 @@ XMPP-Bot with HTTP-API for Monitoring Alerts
 
 ## Start
 - python3 prometheus-xmpp-alerts.py
-- gunicorn -w 5 -b 0.0.0.0:8080 prometheus-xmpp-alerts:app
+- gunicorn -w 5 -b 0.0.0.0:8080 prometheus-xmpp-alerts:alertbot

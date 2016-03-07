@@ -1,6 +1,11 @@
 {
-  "host": "",
-  "port": 5222,
-  "jid": "",
-  "password": ""
+  "xmpp_host": "",
+  "xmpp_port": 5222,
+  "xmpp_jid": "",
+  "xmpp_password": "",
+  "xmpp_receivers": [
+    ""
+  ],
+  "flask_host": "0.0.0.0",
+  "flask_port": 8080
 }
