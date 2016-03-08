@@ -4,7 +4,6 @@
 from sleekxmpp import ClientXMPP
 import logging
 
-
 class Bot(ClientXMPP):
     def __init__(self, jid, password):
         ClientXMPP.__init__(self, jid=jid, password=password)
@@ -12,7 +11,7 @@ class Bot(ClientXMPP):
         self.add_event_handler('session_start', self.session_start_handler)
 
     def start(self, host, port):
-        if not self.connect((host, port)):
+        if not self.connect((host, port), reattempt=True):
             return False
         self.process()
         return True
