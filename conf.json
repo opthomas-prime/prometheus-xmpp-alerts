@@ -6,6 +6,7 @@
   "xmpp_receivers": [
     ""
   ],
+  "mq_name": "/prometheus-xmpp-alerts",
   "flask_host": "0.0.0.0",
-  "flask_port": 8080
+  "flask_port": "8080"
 }
