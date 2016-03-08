@@ -53,7 +53,6 @@ def connect_xmpp():
               conf['xmpp_password'])
 
     logging.info('attempting to connect to xmpp server...')
-    bot.start(conf['xmpp_host'], conf['xmpp_port'])
     if not timeout(bot.start, [conf['xmpp_host'], conf['xmpp_port']], duration=5):
         logging.error('unable to connect to xmpp server.')
         return False
