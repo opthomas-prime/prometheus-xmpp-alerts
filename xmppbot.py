@@ -1,18 +1,21 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-import sys
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from sleekxmpp import ClientXMPP
 import logging
 
 
 class Bot(ClientXMPP):
-    def __init__(self, jid, password, host, port):
+    def __init__(self, jid, password):
         ClientXMPP.__init__(self, jid=jid, password=password)
 
         self.add_event_handler('session_start', self.session_start_handler)
 
-        self.connect((host, port))
+    def start(self, host, port):
+        if not self.connect((host, port)):
+            return False
         self.process()
+        return True
 
     def session_start_handler(self, _):
         self.send_presence()
