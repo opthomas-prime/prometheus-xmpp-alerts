@@ -1,5 +1,26 @@
 # prometheus-xmpp-alerts
-XMPP-Bot with HTTP-API for Monitoring Alerts
+XMPP-Bot with Webhook for Monitoring Alerts from Prometheus (https://prometheus.io/docs/alerting/alertmanager/).
+
+## How it works
+
+```
+|
+| Alertmanager (Webhook receiver)
+|
+|             +------------+
++------------>| webhook.py |---+
+              +------------+   |
+                               |
+                               | POSIX IPC MQ
+                               |
+              +------------+   |
++-------------| xmppbot.py |<--+
+|             +------------+
+|
+| XMPP Messages
+|
+```
+
 
 ## Dependencies
 - sudo pip3 install flask
