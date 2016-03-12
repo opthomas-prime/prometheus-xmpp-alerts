@@ -1,6 +1,3 @@
-# dont commit changes in config to avoid accidentally publishing login credentials
-conf.json
-
 # python stuff
 __pycache__/
 *.py[cod]
