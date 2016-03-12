@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import signal
 
-DEFAULT_TIMEOUT_SEC = 1
+QUEUE_ENCODING = 'utf-8'
 
+DEFAULT_TIMEOUT_SEC = 5
 
 def timeout(func, args=(), kwargs={}, duration=DEFAULT_TIMEOUT_SEC):
     class FunctionTimeoutError(Exception):
@@ -22,3 +24,8 @@ def timeout(func, args=(), kwargs={}, duration=DEFAULT_TIMEOUT_SEC):
     finally:
         signal.alarm(0)
     return result
+
+
+def load_config():
+    with open('conf.json') as f:
+        return json.loads(''.join(f.readlines()))

@@ -7,13 +7,10 @@ import logging
 import os
 import posix_ipc as ipc
 import sys
-import signal
-from timeout import timeout
+from common import timeout, load_config, QUEUE_ENCODING
 
 LOG_FORMAT = os.path.basename(__file__) + ' %(message)s'
 logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
-
-queue = None
 
 
 class Bot(ClientXMPP):
@@ -36,48 +33,48 @@ class Bot(ClientXMPP):
             self.send_message(mto=receiver, mbody=msg)
 
 
-def load_config():
-    with open('conf.json') as f:
-        return json.loads(''.join(f.readlines()))
+class IPCReceiver:
+    def __init__(self, mq_name):
+        self.queue = ipc.MessageQueue(name=mq_name, flags=ipc.O_CREAT)
+        while True:
+            try:
+                self.queue.receive(0)
+            except ipc.BusyError:
+                break
 
+    def cleanup(self):
+        if self.queue:
+            try:
+                self.queue.close()
+                self.queue.unlink()
+            except ipc.ExistentialError:
+                pass
 
-def terminate(sig, _):
-    global queue
-
-    if queue:
-        try:
-            queue.close()
-            queue.unlink()
-        except ipc.ExistentialError:
-            pass
-    sys.exit(1)
+    def receive(self):
+        return self.queue.receive()[0].decode(QUEUE_ENCODING)
 
 
 def main():
-    global queue
-
     conf = load_config()
-
     bot = Bot(conf['xmpp_jid'], conf['xmpp_password'])
-    if not timeout(bot.start, [conf['xmpp_host'], conf['xmpp_port']], duration=5):
-        logging.error('unable to connect to xmpp server.')
+    if not timeout(bot.start, [conf['xmpp_host'], conf['xmpp_port']]):
         terminate()
-
-    queue = ipc.MessageQueue(name=conf['mq_name'], flags=ipc.O_CREAT)
-    while True:
-        try:
-            queue.receive(0)
-        except ipc.BusyError:
-            break
-
-    signal.signal(signal.SIGINT, terminate)
+    receiver = IPCReceiver(conf['mq_name'])
     try:
         while True:
-            bot.send_message_to(queue.receive()[0].decode(encoding='utf-8'), conf['xmpp_receivers'])
+            data = json.loads(receiver.receive())
+            bot.send_message_to(data['message'], data['recipients'])
     except KeyboardInterrupt:
-        terminate(None, None)
+        pass
     except ipc.SignalError:
-        terminate(None, None)
+        pass
+    finally:
+        receiver.cleanup()
+        terminate()
+
+
+def terminate():
+    sys.exit(1)
 
 
 if __name__ == '__main__':
