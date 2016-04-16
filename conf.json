@@ -3,7 +3,7 @@
   "xmpp_port": 5222,
   "xmpp_jid": "",
   "xmpp_password": "",
-  "xmpp_receivers": [
+  "xmpp_recipients": [
     ""
   ],
   "mq_name": "/prometheus-xmpp-alerts",
