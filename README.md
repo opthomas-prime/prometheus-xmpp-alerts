@@ -1,9 +1,9 @@
 # prometheus-xmpp-alerts
 XMPP-Bot with Webhook for Monitoring Alerts from Prometheus (https://prometheus.io/docs/alerting/alertmanager/).
 
-Prometheus's Alertmanager doesn't support alerting via XMPP/Jabber messages at the moment. Since i want to receive alters on my mobile devices and i like XMPP, i built this tool.
+Prometheus's Alertmanager doesn't support alerting via XMPP/Jabber messages at the moment. Since i want to receive alerts on my mobile devices and i like XMPP, i built this tool.
 
-If you want to use this tool but the description to configure/run it is not sufficient, feel free to contact me.
+If you want to use this tool but the description to configure/run is not sufficient, feel free to contact me.
 
 ## How it works
 
