@@ -22,14 +22,22 @@ class PrometheusAlert:
     def __init__(self, alert):
         self.alert = json.loads(alert)
 
-    def pretty(self):
-        pretty = ''
+    def plain(self):
+        plain = ''
         for i, alert in enumerate(self.alert['alerts']):
-            pretty += '\n*** %s ALERT %d/%d (%s) ***\n' % (self.alert['status'].upper(), i + 1, len(self.alert['alerts']), alert['startsAt'])
-            for annotation in alert['annotations']:
-                pretty += (alert['annotations'][annotation]) + '\n'
-            labels = []
-            for label in alert['labels']:
-                labels.append('%s: %s' % (label, alert['labels'][label]))
-            pretty += ', '.join(labels) + '\n'
-        return pretty
+            plain += '\n%s, %d/%d, %s, ' % (self.alert['status'].upper(), i + 1, len(self.alert['alerts']), alert['startsAt'])
+            plain += '%s (%s, %s)' % (alert['annotations']['summary'], alert['labels']['customer'], alert['labels']['product'])
+        return plain
+
+    def html(self):
+        html = ''
+        for i, alert in enumerate(self.alert['alerts']):
+            icon = ''; color = ''
+            if self.alert['status'].upper() == 'RESOLVED':
+                icon = ':)'; color = 'green'
+            else:
+                icon = ':\'('; color = 'red'
+            html += '<br />%s <strong><span style="color:%s">%s %d/%d </span></strong>%s ' % (icon, color, self.alert['status'].upper(), i + 1, len(self.alert['alerts']), alert['startsAt'])
+            html += '<strong>%s</strong> (%s, %s)' % (alert['annotations']['summary'], alert['labels']['customer'], alert['labels']['product'])
+        return html
+

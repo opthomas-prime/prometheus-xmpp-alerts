@@ -28,9 +28,12 @@ class Bot(ClientXMPP):
         self.send_presence()
         self.get_roster()
 
-    def send_message_to(self, msg, receivers):
+    def send_message_to(self, msg, receivers, html=None):
         for receiver in receivers:
-            self.send_message(mto=receiver, mbody=msg)
+            if html:
+                self.send_message(mto=receiver, mbody=msg, mhtml=html)
+            else:
+                self.send_message(mto=receiver, mbody=msg)
 
 
 class IPCReceiver:
@@ -63,7 +66,10 @@ def main():
     try:
         while True:
             data = json.loads(receiver.receive())
-            bot.send_message_to(data['message'], data['recipients'])
+            if 'html' in data:
+                bot.send_message_to(data['message'], data['recipients'], html=data['html'])
+            else:
+                bot.send_message_to(data['message'], data['recipients'])
     except KeyboardInterrupt:
         pass
     except ipc.SignalError:

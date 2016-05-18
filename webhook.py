@@ -31,12 +31,15 @@ def prometheus_alert():
     global conf
     if not conf:
         conf = load_config()
-    msg = PrometheusAlert(request.data.decode()).pretty()
-    push_in_queue(construct_message(conf['xmpp_recipients'], msg))
+    msg = PrometheusAlert(request.data.decode()).plain()
+    html = PrometheusAlert(request.data.decode()).html()
+    push_in_queue(construct_message(conf['xmpp_recipients'], msg, html))
     return '', 204
 
 
-def construct_message(recipients, msg):
+def construct_message(recipients, msg, html=None):
+    if html:
+        return json.dumps({'recipients': recipients, 'message': msg, 'html': html})
     return json.dumps({'recipients': recipients, 'message': msg})
 
 
