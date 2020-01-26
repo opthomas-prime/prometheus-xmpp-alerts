@@ -1,5 +1,5 @@
 # DEPRECATION NOTICE
-I wont fix any issues in this project. Use https://github.com/opthomas-prime/xmpp-webhook instead!
+I wont fix any issues in this project. Use https://github.com/tmsmr/xmpp-webhook instead!
 
 # prometheus-xmpp-alerts
 XMPP-Bot with Webhook for Monitoring Alerts from Prometheus (https://prometheus.io/docs/alerting/alertmanager/).
